@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import sys
 import logging
-# logging.basicConfig(stream=sys.stderr)
+logging.basicConfig(stream=sys.stderr)
+sys.path.append("/home/ubuntu/env/lib/python3.10/site-packages")
 sys.path.insert(0, "/home/ubuntu/Task1/")
 print("helllll")
 #
