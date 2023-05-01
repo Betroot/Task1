@@ -5,6 +5,7 @@ logging.basicConfig(stream=sys.stderr)
 sys.path.append("/home/ubuntu/env/lib/python3.10/site-packages")
 sys.path.insert(0, "/home/ubuntu/Task1/")
 print("helllll")
+logging.error("jsdkfjsdflks")
 #
 # activate_this = "/var/www/Task1/venv/bin/activate_this.py"
 # with open(activate_this) as file_:
