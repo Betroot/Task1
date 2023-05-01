@@ -6,8 +6,9 @@ import json
 
 table_name = 'music'
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-def create_music_table():
 
+
+def create_music_table():
     # Check if the table already exists
     try:
         table = dynamodb.Table(table_name)
@@ -19,33 +20,21 @@ def create_music_table():
                 TableName=table_name,
                 KeySchema=[
                     {
-                        'AttributeName': 'title',
+                        'AttributeName': 'artist',
                         'KeyType': 'HASH'
                     },
                     {
-                        'AttributeName': 'artist',
+                        'AttributeName': 'year',
                         'KeyType': 'RANGE'
                     }
                 ],
                 AttributeDefinitions=[
-                    {
-                        'AttributeName': 'title',
-                        'AttributeType': 'S'
-                    },
                     {
                         'AttributeName': 'artist',
                         'AttributeType': 'S'
                     },
                     {
                         'AttributeName': 'year',
-                        'AttributeType': 'N'
-                    },
-                    {
-                        'AttributeName': 'web_url',
-                        'AttributeType': 'S'
-                    },
-                    {
-                        'AttributeName': 'image_url',
                         'AttributeType': 'S'
                     }
                 ],
@@ -62,17 +51,19 @@ def create_music_table():
         # Table exists, no need to create it
         print(f"Table {table_name} already exists.")
 
+
 def load_music():
     table = dynamodb.Table(table_name)
     # Load data from a2.json
-    with open('a2.json', 'r') as f:
-        data = json.load(f)
+    with open('a2-1.json', 'r') as json_file:
+        music_list = json.load(json_file)
 
-    # Batch write the items to the table
-    with table.batch_writer() as batch:
-        for item in data:
-            batch.put_item(Item=item)
+    for music in music_list:
+        artist = music['artist']
+        year = int(music['year'])
+        title = music['title']
+        web_url = music['web_url']
+        img_url = music['img_url']
+        table.put_item(Item=music)
 
     print(f"Data loaded into {table_name} table.")
-
-
