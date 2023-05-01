@@ -25,7 +25,7 @@ def create_music_table():
                         'KeyType': 'HASH'
                     },
                     {
-                        'AttributeName': 'year',
+                        'AttributeName': 'title',
                         'KeyType': 'RANGE'
                     }
                 ],
@@ -35,7 +35,7 @@ def create_music_table():
                         'AttributeType': 'S'
                     },
                     {
-                        'AttributeName': 'year',
+                        'AttributeName': 'title',
                         'AttributeType': 'S'
                     }
                 ],
