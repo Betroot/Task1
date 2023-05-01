@@ -1,23 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 import sys
-import os
-from flask import Flask
+import logging
+# logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0, "/home/ubuntu/Task1/")
+#
+# activate_this = "/var/www/Task1/venv/bin/activate_this.py"
+# with open(activate_this) as file_:
+#     exec(file_.read(), dict(__file__=activate_this))
 
-# Define the Flask application
-app = Flask(__name__)
-
-# Define your routes and views here
-@app.route("/")
-def index():
-    return "Hello, World!"
-
-# Define the WSGI entry point
-def application(environ, start_response):
-    # Add your Flask application to the Python path
-    sys.path.insert(0, os.path.dirname(__file__))
-
-    # Set the WSGI callable for the application
-    application = app
-
-    # Return the application callable
-    return application(environ, start_response)
+from main import app as application
+application.secret_key = 'your_secret_key_here'
