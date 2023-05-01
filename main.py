@@ -31,7 +31,6 @@ def login():
     password = request.form['password']
 
     user = utils.validate_user(email, password)
-
     # If the query returned one user entity, redirect to the dashboard
     if user:
         session['email'] = email
@@ -39,7 +38,7 @@ def login():
         return resp
     # If the query returned no or multiple user entities, show an error message
     else:
-        error_msg = 'ID or password is invalid'
+        error_msg = 'ID or password is invalid'+email+password
         return render_template('login.html', error_msg=error_msg)
 #
 # @app.route('/user', methods=['GET', "POST"])

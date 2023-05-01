@@ -70,6 +70,7 @@ def load_music():
 
     print(f"Data loaded into {table_name} table.")
 
+
 def validate_user(email, password):
     login_table = dynamodb.Table('login')
     # Query the login table to check if there is a matching record
