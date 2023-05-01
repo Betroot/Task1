@@ -69,3 +69,18 @@ def load_music():
         table.put_item(Item=song)
 
     print(f"Data loaded into {table_name} table.")
+
+def  validate_user(email, password):
+    login_table = dynamodb.Table('login')
+    # Query the login table to check if there is a matching record
+    response = login_table.get_item(
+        Key={
+            'email': email,
+            'password': password
+        }
+    )
+    # Check whether there is a matching record
+    if 'Item' not in response:
+        return False
+    else:
+        return True

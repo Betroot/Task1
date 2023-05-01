@@ -22,6 +22,25 @@ def root():
     return render_template(
         'login.html')
 
+@app.route('/login', methods=['GET', "POST"])  # 路由默认接收请求方式位POST，然而登录所需要请求都有，所以要特别声明。
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+
+    user_id = request.form['id']
+    password = request.form['password']
+
+    valid = utils.validate_user(user_id, password)
+
+    # If the query returned one user entity, redirect to the dashboard
+    if valid:
+        session['user_id'] = user_id
+        resp = redirect(url_for('forum'))
+        return resp
+    # If the query returned no or multiple user entities, show an error message
+    else:
+        error_msg = 'ID or password is invalid'
+        return render_template('login.html', error_msg=error_msg)
 #
 # @app.route('/user', methods=['GET', "POST"])
 # def user():
