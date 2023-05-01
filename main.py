@@ -30,10 +30,10 @@ def login():
     user_id = request.form['id']
     password = request.form['password']
 
-    valid = utils.validate_user(user_id, password)
+    user = utils.validate_user(user_id, password)
 
     # If the query returned one user entity, redirect to the dashboard
-    if valid:
+    if user:
         session['user_id'] = user_id
         resp = redirect(url_for('forum'))
         return resp
