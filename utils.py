@@ -59,7 +59,7 @@ def load_music():
     with open("/var/www/myapp/music.json") as json_file:
         data = json.load(json_file)
 
-    songs = data['song']
+    songs = data['songs']
     for song in songs:
         artist = song['artist']
         year = int(song['year'])
