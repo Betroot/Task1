@@ -57,15 +57,15 @@ def load_music():
     table = dynamodb.Table(table_name)
     # Load data from music.json
     with open("/var/www/myapp/music.json") as json_file:
-        music_list = json.load(json_file, parse_float=Decimal)
-        print(music_list)
+        data = json.load(json_file)
 
-    for music in music_list:
-        artist = music['artist']
-        year = int(music['year'])
-        title = music['title']
-        web_url = music['web_url']
-        img_url = music['img_url']
-        table.put_item(Item=music)
+    songs = data['song']
+    for song in songs:
+        artist = song['artist']
+        year = int(song['year'])
+        title = song['title']
+        web_url = song['web_url']
+        img_url = song['img_url']
+        table.put_item(Item=song)
 
     print(f"Data loaded into {table_name} table.")
