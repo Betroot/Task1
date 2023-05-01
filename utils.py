@@ -55,7 +55,7 @@ def create_music_table():
 def load_music():
     table = dynamodb.Table(table_name)
     # Load data from a2.json
-    with open('a2.json', 'r') as json_file:
+    with open("a2.json") as json_file:
         music_list = json.load(json_file)
 
     for music in music_list:
