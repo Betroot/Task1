@@ -4,7 +4,7 @@ import logging
 from main import app as application
 
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, "/home/ubuntu/Task1/")
+sys.path.insert(0,"/var/www/myapp/")
 #
 # activate_this = "/var/www/Task1/venv/bin/activate_this.py"
 # with open(activate_this) as file_:
