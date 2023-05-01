@@ -1,6 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 import json
+from decimal import Decimal
 
 # Define the table name and resource
 
@@ -56,7 +57,7 @@ def load_music():
     table = dynamodb.Table(table_name)
     # Load data from music.json
     with open("music.json") as json_file:
-        music_list = json.load(json_file)
+        music_list = json.load(json_file, parse_float=Decimal)
 
     for music in music_list:
         artist = music['artist']
