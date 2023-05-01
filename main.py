@@ -14,49 +14,11 @@ app = Flask(__name__)
 # app.secret_key = 'your-secret-key-here'
 #
 #
-# def create_user_table(dynamodb=None):
-#     if not dynamodb:
-#         dynamodb = boto3.resource('dynamodb',
-#                                   endpoint_url="http://localhost:8000")
-#     table = dynamodb.create_table(
-#         TableName='login',
-#         KeySchema=[
-#             {
-#                 'AttributeName': 'email',
-#                 'KeyType': 'HASH'
-#             },
-#             {
-#                 'AttributeName': 'user_name',
-#                 'KeyType': 'RANGE'
-#             }
-#         ],
-#         AttributeDefinitions=[
-#             {
-#                 'AttributeName': 'email',
-#                 'AttributeType': 'S'
-#             },
-#             {
-#                 'AttributeName': 'user_name',
-#                 'AttributeType': 'S'
-#             },
-#             {
-#                 'AttributeName': 'password',
-#                 'AttributeType': 'S'
-#             }
-#         ],
-#         ProvisionedThroughput={
-#             'ReadCapacityUnits': 10,
-#             'WriteCapacityUnits': 10
-#         }
-#     )
-#     return table
-#
-#
-# [START gae_python38_datastore_render_times]
-# [START gae_python3_datastore_render_times]
+import utils
 @app.route('/')
 def root():
-    #create_user_table()
+    utils.create_music_table()
+    utils.load_music()
     return render_template(
         'login.html')
 
