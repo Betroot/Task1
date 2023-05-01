@@ -5,7 +5,7 @@ import json
 # Define the table name and resource
 
 table_name = 'music'
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 def create_music_table():
 
     # Check if the table already exists
