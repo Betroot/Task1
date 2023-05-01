@@ -27,14 +27,14 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
 
-    user_id = request.form['id']
+    email = request.form['email']
     password = request.form['password']
 
-    user = utils.validate_user(user_id, password)
+    user = utils.validate_user(email, password)
 
     # If the query returned one user entity, redirect to the dashboard
     if user:
-        session['user_id'] = user_id
+        session['email'] = email
         resp = redirect(url_for('forum'))
         return resp
     # If the query returned no or multiple user entities, show an error message

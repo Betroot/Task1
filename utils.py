@@ -82,6 +82,6 @@ def validate_user(email, password):
         )
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return False
     else:
-        return response['Item']
+        return True
