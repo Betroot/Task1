@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Forum Page</title>
+  <style>
+    /* Add necessary styles here */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #f7f7f7;
+    }
+
+    .user-area {
+      text-align: right;
+      padding: 10px 0;
+    }
+
+    .user-area img {
+      max-width: 50px;
+      max-height: 50px;
+      border-radius: 50%;
+    }
+
+    .message-posting-area {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f7f7f7;
+      border-radius: 5px;
+    }
+
+    .message-posting-area label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .message-posting-area input[type="text"],
+    .message-posting-area textarea {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+
+    .message-posting-area textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    .message-posting-area button[type="submit"] {
+      display: block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .message-display-area {
+      margin-top: 20px;
+    }
+
+    .message-display-area .message {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f7f7f7;
+      border-radius: 5px;
+    }
+
+    .message-display-area .message h3 {
+      margin-top: 0;
+    }
+
+    .message-display-area .message p {
+      margin-bottom: 0;
+    }
+
+    .message-display-area .message img {
+      max-width: 100%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="user-area">
+      <a href="{{ url_for('user') }}"><img src="{{ user_image }}" alt="User Image"></a>
+      <p>Welcome, <a href="{{ url_for('user') }}">{{ user_name }}</a></p>
+      <a href="/logout" class="logout-link">Logout</a>
+    </div>
+
+    <div class="message-posting-area">
+      <form action="/post_message" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="subject">Subject:</label>
+          <input type="text" class="form-control" id="subject" name="subject" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea class="form-control" id="message" name="message"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Image:</label>
+          <input type="file" class="form-control-file" id="image" name="image">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <div class="message-display-area">
+      <!-- message display area code here -->
+      <h2>Latest Messages</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Message Text</th>
+            <th>Message Image</th>
+            <th>User Name</th>
+            <th>User Image</th>
+            <th>Posting Date and Time</th>
+          </tr>
+        </thead>
+        <tbody id="messages-table-body">
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    const tableBody = document.getElementById("messages-table-body");
+
+    // Fetch latest messages from backend and add to table
+    fetch("/get_latest_messages")
+      .then(response => response.json())
+      .then(messages => {
+        messages.forEach(message => {
+          const row = document.createElement("tr");
+
+          const subjectCell = document.createElement("td");
+          subjectCell.textContent = message.subject;
+          row.appendChild(subjectCell);
+
+          const messageCell = document.createElement("td");
+          messageCell.textContent = message.message_text;
+          row.appendChild(messageCell);
+
+          const messageImageCell = document.createElement("td");
+          const messageImage = document.createElement("img");
+          messageImage.src = message.image_url;
+          messageImage.style.width = "50px"; // Set image width here
+          messageImage.style.height = "50px"; // Set image height here
+          messageImageCell.appendChild(messageImage);
+          row.appendChild(messageImageCell);
+
+          const userNameCell = document.createElement("td");
+          userNameCell.textContent = message.user_name;
+          row.appendChild(userNameCell);
+
+          const userImageCell = document.createElement("td");
+          const userImage = document.createElement("img");
+          userImage.src = message.user_image_url;
+          userImage.style.width = "50px"; // Set image width here
+          userImage.style.height = "50px"; // Set image height here
+          userImageCell.appendChild(userImage);
+          row.appendChild(userImageCell);
+
+          const timestampCell = document.createElement("td");
+          timestampCell.textContent = message.timestamp;
+          row.appendChild(timestampCell);
+
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+
+</html>
