@@ -58,6 +58,7 @@ def load_music():
     # Load data from music.json
     with open("/var/www/myapp/music.json") as json_file:
         music_list = json.load(json_file, parse_float=Decimal)
+        print(music_list)
 
     for music in music_list:
         artist = music['artist']
