@@ -73,6 +73,17 @@ def insert_subscribe(email, title, year, artist):
     table = dynamodb.Table('subscribe')
     table.put_item(Item={'email': email, 'title': title, 'year': year, 'artist': artist})
 
+def query_subscription_by_email(email):
+    params = {
+        'TableName': 'subscribe',  # 替换为你的表名
+        'KeyConditionExpression': 'email = :email',  # 使用 email 作为 partition key 进行查询
+        'ExpressionAttributeValues': {':email': {'S': email}},  # 指定 email 的值
+        'ProjectionExpression': 'title, artist, year'  # 只查询 title、artist 和 year 这三个属性
+    }
+
+    # 执行查询并返回结果
+    response = dynamodb.query(**params)
+    return response
 def insert_user(email, username, password):
     table = dynamodb.Table('login')
     table.put_item(Item={'email': email, 'user_name': username, 'password': password})

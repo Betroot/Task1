@@ -124,5 +124,20 @@ def subscribe():
     # Return a success response
     return jsonify({'success': True})
 
+@app.route('/get_subscription', methods=['GET'])
+def get_latest_messages():
+    email = session.get('email')
+    response = utils.query_subscription_by_email(email)
+    music_list = []
+    for item in response['Items']:
+        music_info = {
+            'title': item['title'],
+            'year': item['year'],
+            'artist': item['artist']
+        }
+        music_list.append(music_info)
+    return jsonify(music_list)
+
+
 if __name__ == '__main__':
     app.run()
