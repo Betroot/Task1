@@ -82,6 +82,9 @@ def perform_query():
     title = request.args.get('title')
     year = request.args.get('year')
     artist = request.args.get('artist')
+    app.logger.info("title: " +title)
+    app.logger.info("year: " +year)
+    app.logger.info("artist: " +artist)
 
     response = utils.query_music(title, year, artist)
     if response['Count'] == 0:
