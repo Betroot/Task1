@@ -1,12 +1,18 @@
-from flask import Flask, request, redirect, render_template, session, url_for
+from flask import Flask, request, redirect, render_template, session, url_for, flash, jsonify, logging
 import logging
-import utils
 
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 handler = logging.FileHandler('/var/log/apache2/myapp.log')
 handler.setLevel(logging.INFO)
 app.logger.addHandler(handler)
+
+#
+# app.secret_key = 'your-secret-key-here'
+#
+#
+import utils
+
 
 @app.route('/')
 def root():
@@ -57,7 +63,6 @@ def register():
         utils.insert_user(email, user_name, password)
         return redirect(url_for('login'))
 
-
 @app.route('/forum', methods=['GET', "POST"])
 def forum():
     user_name = session.get("user_name")
@@ -73,4 +78,14 @@ def logout_():
 
 
 if __name__ == '__main__':
+
+    # This is used when running locally only. When deploying to Google App
+    # Engine, a webserver process such as Gunicorn will serve the app. This
+    # can be configured by adding an `entrypoint` to app.yaml.
+
+    # Flask's development server will automatically serve static files in
+    # the "static" directory. See:
+    # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
+    # App Engine itself will serve those files as configured in app.yaml.
+    # app.run(host='127.0.0.1', port=8080, debug=True)
     app.run()
