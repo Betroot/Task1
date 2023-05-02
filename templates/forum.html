@@ -37,31 +37,30 @@
 </head>
 
 <body>
+  <div class="container">
+    <div class="user-area">
+      <p>Welcome, {{ user_name }}</a></p>
+      <a href="/logout" class="logout-link">Logout</a>
+    </div>
 
-  <div class="user-area">
-    <p>Welcome, {{ user_name }}</a></p>
-    <a href="/logout" class="logout-link">Logout</a>
+    <div class="query-area">
+      <h2>Query Music</h2>
+      <label for="title-input">Title:</label>
+      <input type="text" id="title-input">
+
+      <label for="year-input">Year:</label>
+      <input type="text" id="year-input">
+
+      <label for="artist-input">Artist:</label>
+      <input type="text" id="artist-input">
+
+      <button id="query-btn">Query</button>
+
+      <div id="query-results"></div>
+      <div id="Subscriptions"></div>
+    </div>
   </div>
-
-  <div class="query-area">
-    <h2>Query Music</h2>
-    <label for="title-input">Title:</label>
-    <input type="text" id="title-input">
-
-    <label for="year-input">Year:</label>
-    <input type="text" id="year-input">
-
-    <label for="artist-input">Artist:</label>
-    <input type="text" id="artist-input">
-
-    <button id="query-btn">Query</button>
-
-    <div id="query-results"></div>
-    <div id="Subscriptions"></div>
-  </div>
-
   <script>
-
 
 
     document.getElementById("query-btn").addEventListener("click", function () {
