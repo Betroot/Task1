@@ -1,6 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 import json
+import logging
 from decimal import Decimal
 
 # Define the table name and resource
@@ -82,6 +83,7 @@ def validate_user(email, password):
                 'password': password
             }
         )
+        logging.error("message: " + response)
     except ClientError as e:
         print(e.response['Error']['Message'])
         return False
