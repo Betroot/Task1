@@ -146,78 +146,77 @@
       <div id="results"></div>
       <div id="Subscriptions"></div>
     </div>
-  
 
-    <script>
-      document.getElementById("query-btn").addEventListener("click", function () {
-        var title = document.getElementById("title").value;
-        var year = document.getElementById("year").value;
-        var artist = document.getElementById("artist").value;
+  </div>
+  <script>
+    document.getElementById("query-btn").addEventListener("click", function () {
+      var title = document.getElementById("title").value;
+      var year = document.getElementById("year").value;
+      var artist = document.getElementById("artist").value;
 
-        // perform query
-        var results = performQuery(title, year, artist);
+      // perform query
+      var results = performQuery(title, year, artist);
 
-        // display results
-        var resultsDiv = document.getElementById("results");
-        resultsDiv.innerHTML = "";
+      // display results
+      var resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "aaaaaa";
 
-        if (results.length === 0) {
-          resultsDiv.innerHTML = "No result is retrieved. Please query again.";
-        } else {
-          for (var i = 0; i < results.length; i++) {
-            var result = results[i];
+      if (results.length === 0) {
+        resultsDiv.innerHTML = "No result is retrieved. Please query again.";
+      } else {
+        for (var i = 0; i < results.length; i++) {
+          var result = results[i];
 
-            // display music information
-            var musicDiv = document.createElement("div");
-            musicDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
+          // display music information
+          var musicDiv = document.createElement("div");
+          musicDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
 
-            // display artist image
-            var img = document.createElement("img");
-            img.src = result.artistImage;
-            musicDiv.appendChild(img);
+          // display artist image
+          var img = document.createElement("img");
+          img.src = result.artistImage;
+          musicDiv.appendChild(img);
 
-            // add subscription button
-            var subBtn = document.createElement("button");
-            subBtn.innerHTML = "Subscribe";
-            subBtn.addEventListener("click", function () {
-              subscribe(result);
-            });
-            musicDiv.appendChild(subBtn);
+          // add subscription button
+          var subBtn = document.createElement("button");
+          subBtn.innerHTML = "Subscribe";
+          subBtn.addEventListener("click", function () {
+            subscribe(result);
+          });
+          musicDiv.appendChild(subBtn);
 
-            resultsDiv.appendChild(musicDiv);
-          }
+          resultsDiv.appendChild(musicDiv);
         }
-      });
+      }
+    });
 
-      function performQuery(title, year, artist) {
-        // perform query and return results
-        // ...
-        // Check if at least one query parameter is present
-        if (!title && !year && !artist) {
-          alert("Please enter at least one query parameter.");
-          return;
-        }
-
+    function performQuery(title, year, artist) {
+      // perform query and return results
+      // ...
+      // Check if at least one query parameter is present
+      if (!title && !year && !artist) {
+        alert("Please enter at least one query parameter.");
+        return;
       }
 
-      function subscribe(result) {
-        // add subscription to DynamoDB
-        // ...
+    }
 
-        // display subscription in subscriptions area
-        var subsDiv = document.getElementById("subscriptions");
+    function subscribe(result) {
+      // add subscription to DynamoDB
+      // ...
 
-        var subDiv = document.createElement("div");
-        subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
+      // display subscription in subscriptions area
+      var subsDiv = document.getElementById("subscriptions");
 
-        var img = document.createElement("img");
-        img.src = result.artistImage;
-        subDiv.appendChild(img);
+      var subDiv = document.createElement("div");
+      subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
 
-        subsDiv.appendChild(subDiv);
-      }
-    </script>
-</div>
+      var img = document.createElement("img");
+      img.src = result.artistImage;
+      subDiv.appendChild(img);
+
+      subsDiv.appendChild(subDiv);
+    }
+  </script>
+
 </body>
-
 </html>
