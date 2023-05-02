@@ -3,9 +3,56 @@ from botocore.exceptions import ClientError
 import json
 
 from main import app
-
+import requests
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+
+s3 = boto3.client('s3')
+bucket_name = "music-bucket340822"
+
+
+def load_image_url(image_url):
+    filename = image_url.split('/')[-1]
+    response = requests.get(image_url)
+    if response.status_code != 200:
+        app.logger.info(f"Error downloading {image_url}: {response.status_code}")
+    # Upload image to S3
+    try:
+        s3.upload_fileobj(response.content, bucket_name, filename)
+        app.logger.info(f"Uploaded {filename} to S3 bucket.")
+    except Exception as e:
+        app.logger.info(f"Error uploading {filename} to S3 bucket: {e}")
+
+def validate_user(email, password):
+    login_table = dynamodb.Table('login')
+
+    try:
+        response = login_table.get_item(
+            Key={
+                'email': email
+            }
+        )
+    except ClientError as e:
+        app.logger.info(e.response['error']['message'])
+        return False
+
+    else:
+        # check if response contains item and password matches
+        if 'Item' in response and response['Item']['password'] == password:
+            return response['Item']
+        else:
+            return False
+
+def is_email_exist(email):
+    table = dynamodb.Table('login')
+    response = table.get_item(Key={'email': email})
+    if 'Item' in response:
+        return True
+    return False
+
+def insert_user(email, username, password):
+    table = dynamodb.Table('login')
+    table.put_item(Item={'email': email, 'user_name': username, 'password': password})
 
 
 def create_login_table():
@@ -159,45 +206,7 @@ def load_music():
 
     songs = data['songs']
     for song in songs:
-        artist = song['artist']
-        year = int(song['year'])
-        title = song['title']
-        web_url = song['web_url']
-        img_url = song['img_url']
+        load_image_url(song['img_url'])
         table.put_item(Item=song)
 
-    print(f"Data loaded into {table_name} table.")
-
-
-def validate_user(email, password):
-    login_table = dynamodb.Table('login')
-
-    try:
-        response = login_table.get_item(
-            Key={
-                'email': email
-            }
-        )
-    except ClientError as e:
-        app.logger.info(e.response['error']['message'])
-        return False
-
-    else:
-        # check if response contains item and password matches
-        if 'Item' in response and response['Item']['password'] == password:
-            return response['Item']
-        else:
-            return False
-
-def is_email_exist(email):
-    table = dynamodb.Table('login')
-    response = table.get_item(Key={'email': email})
-    if 'Item' in response:
-        return True
-    return False
-
-def insert_user(email, username, password):
-    table = dynamodb.Table('login')
-    table.put_item(Item={'email': email, 'user_name': username, 'password': password})
-
-
+    app.logger.info(f"Data loaded into {table_name} table.")
