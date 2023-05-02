@@ -119,15 +119,15 @@
 
       // Send the query to the server and handle the response
       fetch(`/perform-query?${queryString}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("An error occurred.");
-          }
-          return response.json();
-        })
+        .then(response=>response.json()) 
+        // => {
+        //   if (!response.ok) {
+        //     throw new Error("An error occurred.");
+        //   }
+        //   return response.json();
+        // })
         .then((data) => {
           console.log(typeof data);
-          data = JSON.parse(data);
           if ('message' in data) {
             // display results
             var resultsDiv = document.getElementById("query-results");
