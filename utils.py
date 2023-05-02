@@ -77,6 +77,15 @@ def validate_user(email, password):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     login_table = dynamodb.Table('login')
 
+    response = login_table.scan()
+
+    items = response['Items']
+    while response.get('LastEvaluatedKey'):
+        response = login_table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+        items.extend(response['Items'])
+
+    app.logger.info(items)
+
     try:
         response = login_table.get_item(
             Key={
