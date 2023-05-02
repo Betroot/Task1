@@ -116,6 +116,16 @@ def subscribe():
     utils.insert_subscribe(email,title,year,artist,img_url)
     return jsonify({'success': True})
 
+@app.route('/remove_subscribe', methods=['POST'])
+def remove_subscribe():
+    title = request.get_json()['title']
+    year = request.get_json()['year']
+    artist = request.get_json()['artist']
+    email = session.get('email')
+    utils.delete_subscribe(email,title,year,artist)
+    return jsonify({'success': True})
+
+
 @app.route('/get_subscription', methods=['GET'])
 def get_subscription():
     email = session.get('email')

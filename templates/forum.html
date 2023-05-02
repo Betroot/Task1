@@ -108,9 +108,12 @@
           ImageCell.appendChild(Image);
           row.appendChild(ImageCell);
 
-          const operationCell = document.createElement("td");
-          operationCell.textContent = "";
-          row.appendChild(operationCell);
+          // Create remove button
+        const removeButton = document.createElement('button');
+        removeButton.innerHTML = 'Remove';
+        removeButton.addEventListener('click', () => {
+          removeSubscription(subscription);
+        });
 
           tableBody.appendChild(row);
         });
@@ -125,8 +128,6 @@
 
       // perform query
       var results = performQuery(title, year, artist);
-
-
     });
 
     function performQuery(title, year, artist) {
@@ -201,9 +202,29 @@
           alert("An error occurred. Please try again.");
         });
     }
+
+    function removeSubscription(subscription){
+      fetch("/remove_subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: subscription.title,
+          artist: subscription.artist,
+          year: subscription.year,
+        })
+      }
+      ).then(response => response.json())
+        .then(data => {
+          console.log(data);
+        }
+        ).catch(error => console.error(error));
+      location.reload()
+    }
+
     function subscribe(result) {
       // add subscription to DynamoDB
-      // ...
       fetch("/subscribe", {
         method: "POST",
         headers: {

@@ -71,6 +71,20 @@ def insert_subscribe(email, title, year, artist, img_url):
     table = dynamodb.Table('subscribe')
     table.put_item(Item={'email': email, 'title': title, 'year': year, 'artist': artist, 'img_url': img_url})
 
+def delete_subscribe(email, title, year, artist):
+    table = dynamodb.Table('subscribe')
+    try:
+        response = table.delete_item(
+            Key={
+                'email': email,
+                'title': title
+            },
+        )
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+    else:
+        return response
+
 def query_subscription_by_email(email):
     table = dynamodb.Table('subscribe')
     response = table.query(
