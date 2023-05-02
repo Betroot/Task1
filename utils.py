@@ -37,6 +37,7 @@ def query_music(title, year, artist):
     response = table.scan(
         FilterExpression=Attr('title').contains(title) & Attr('year').contains(year) & Attr('artist').contains(artist)
     )
+    app.logger.info(response)
     return response
 
 
