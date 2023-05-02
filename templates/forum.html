@@ -61,6 +61,9 @@
   </div>
 
   <script>
+
+
+
     document.getElementById("query-btn").addEventListener("click", function () {
       var title = document.getElementById("title-input").value.trim();
       var year = document.getElementById("year-input").value.trim();
@@ -171,7 +174,11 @@
       var subDiv = document.createElement("div");
       subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
 
-      subsDiv.appendChild(subDiv);
+      // var img = document.createElement("img");
+      // img.src = result.artistImage;
+      // subDiv.appendChild(img);
+
+      // subsDiv.appendChild(subDiv);
     }
   </script>
 
