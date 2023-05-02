@@ -11,17 +11,23 @@ s3 = boto3.client('s3')
 bucket_name = "music-bucket340822"
 
 
-def load_image_url(image_url):
-    filename = image_url.split('/')[-1]
-    response = requests.get(image_url)
-    if response.status_code != 200:
-        app.logger.info(f"Error downloading {image_url}: {response.status_code}")
-    # Upload image to S3
-    try:
-        s3.upload_fileobj(response.content, bucket_name, filename)
-        app.logger.info(f"Uploaded {filename} to S3 bucket.")
-    except Exception as e:
-        app.logger.info(f"Error uploading {filename} to S3 bucket: {e}")
+def load_image_url():
+    with open("/var/www/myapp/music.json") as json_file:
+        data = json.load(json_file)
+
+    songs = data['songs']
+    for song in songs:
+        image_url=song['img_url']
+        filename = image_url.split('/')[-1]
+        response = requests.get(image_url)
+        if response.status_code != 200:
+            app.logger.info(f"Error downloading {image_url}: {response.status_code}")
+        # Upload image to S3
+        try:
+            s3.upload_fileobj(response.content, bucket_name, filename)
+            app.logger.info(f"Uploaded {filename} to S3 bucket.")
+        except Exception as e:
+            app.logger.info(f"Error uploading {filename} to S3 bucket: {e}")
 
 def validate_user(email, password):
     login_table = dynamodb.Table('login')
@@ -206,7 +212,7 @@ def load_music():
 
     songs = data['songs']
     for song in songs:
-        load_image_url(song['img_url'])
+        # load_image_url(song['img_url'])
         table.put_item(Item=song)
 
     app.logger.info(f"Data loaded into {table_name} table.")
