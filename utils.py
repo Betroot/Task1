@@ -102,6 +102,7 @@ def load_login_data():
     # with table.batch_writer() as batch:
     #     for item in items:
     #         batch.put_item(Item=item)
+    print("")
 
 
 def create_music_table():
