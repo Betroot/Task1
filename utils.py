@@ -73,6 +73,7 @@ def load_music():
 
 
 def validate_user(email, password):
+    app.logger.info("message: start")
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     login_table = dynamodb.Table('login')
 
