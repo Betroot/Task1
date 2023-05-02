@@ -14,7 +14,7 @@ bucket_name = "music-bucket340822"
 
 # load image url
 def load_image_url():
-    with open("/var/www/myapp/music.json") as json_file:
+    with open("/var/www/myapp/a2.json") as json_file:
         data = json.load(json_file)
 
     songs = data['songs']
@@ -279,7 +279,7 @@ def create_music_table():
 def load_music():
     table_name = 'music'
     table = dynamodb.Table(table_name)
-    with open("/var/www/myapp/music.json") as json_file:
+    with open("/var/www/myapp/a2.json") as json_file:
         data = json.load(json_file)
 
     songs = data['songs']
