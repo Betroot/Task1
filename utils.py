@@ -97,9 +97,9 @@ def validate_user(email, password):
         app.logger.info('User credentials are valid')
         return item
     except KeyError:
-        print('Invalid email or password')
+        app.logger.info('Invalid email or password')
         return None
     except Exception as e:
-        print(f'Error occurred: {e}')
+        app.logger.info(f'Error occurred: {e}')
         return None
 
