@@ -23,7 +23,6 @@ def load_image_url():
         response = requests.get(image_url)
         if response.status_code != 200:
             app.logger.info(f"Error downloading {image_url}: {response.status_code}")
-        # Upload image to S3
         try:
             with io.BytesIO(response.content) as file_obj:
                 s3.upload_fileobj(file_obj, bucket_name, filename)
@@ -74,15 +73,10 @@ def insert_subscribe(email, title, year, artist):
     table.put_item(Item={'email': email, 'title': title, 'year': year, 'artist': artist})
 
 def query_subscription_by_email(email):
-    params = {
-        'TableName': 'subscribe',  # 替换为你的表名
-        'KeyConditionExpression': 'email = :email',  # 使用 email 作为 partition key 进行查询
-        'ExpressionAttributeValues': {':email': {'S': email}},  # 指定 email 的值
-        'ProjectionExpression': 'title, artist, year'  # 只查询 title、artist 和 year 这三个属性
-    }
-
-    # 执行查询并返回结果
-    response = dynamodb.query(**params)
+    table = dynamodb.Table('subscribe')
+    response = table.query(
+        KeyConditionExpression=Key('email').eq(email)
+    )
     app.logger.info("subscription: " +response)
     return response
 def insert_user(email, username, password):
@@ -125,21 +119,17 @@ def create_subscribe_table():
             )
             table.wait_until_exists()
         else:
-            # Some other error occurred, raise it
             raise e
     else:
-        # Table exists, no need to create it
         print(f"Table subscribe already exists.")
 
 
 def create_login_table():
-    # Check if the table already exists
     try:
         table = dynamodb.Table('login')
         table.table_status
     except ClientError as e:
         if e.response['Error']['Code'] == 'ResourceNotFoundException':
-            # Table does not exist, so create it
             table = dynamodb.create_table(
                 TableName='login',
                 KeySchema=[
@@ -161,10 +151,8 @@ def create_login_table():
             )
             table.wait_until_exists()
         else:
-            # Some other error occurred, raise it
             raise e
     else:
-        # Table exists, no need to create it
         print(f"Table login already exists.")
 
 
@@ -230,13 +218,11 @@ def load_login_data():
 
 def create_music_table():
     table_name = 'music'
-    # Check if the table already exists
     try:
         table = dynamodb.Table(table_name)
         table.table_status
     except ClientError as e:
         if e.response['Error']['Code'] == 'ResourceNotFoundException':
-            # Table does not exist, so create it
             table = dynamodb.create_table(
                 TableName=table_name,
                 KeySchema=[
@@ -266,23 +252,19 @@ def create_music_table():
             )
             table.wait_until_exists()
         else:
-            # Some other error occurred, raise it
             raise e
     else:
-        # Table exists, no need to create it
         print(f"Table {table_name} already exists.")
 
 
 def load_music():
     table_name = 'music'
     table = dynamodb.Table(table_name)
-    # Load data from music.json
     with open("/var/www/myapp/music.json") as json_file:
         data = json.load(json_file)
 
     songs = data['songs']
     for song in songs:
-        # load_image_url(song['img_url'])
         table.put_item(Item=song)
 
     app.logger.info(f"Data loaded into {table_name} table.")

@@ -33,13 +33,11 @@ def login():
     password = request.form['password']
 
     user = utils.validate_user(email, password)
-    # If the query returned one user entity, redirect to the dashboard
     if user:
         session['email'] = email
         session['user_name'] = user['user_name']
         resp = redirect(url_for('forum'))
         return resp
-    # If the query returned no or multiple user entities, show an error message
     else:
         error_msg = 'ID or password is invalid'
         return render_template('login.html', error_msg=error_msg)
@@ -50,7 +48,6 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
     if request.method == 'POST':
-        # retrieve the entered values from the form
         email = request.form['email']
         user_name = request.form['user_name']
         password = request.form['password']
@@ -112,8 +109,6 @@ def perform_query():
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
-
-    # Get the music information and corresponding artist image from the request body
     title = request.get_json()['title']
     year = request.get_json()['year']
     artist = request.get_json()['artist']
@@ -121,7 +116,6 @@ def subscribe():
 
     utils.create_subscribe_table()
     utils.insert_subscribe(email,title,year,artist)
-    # Return a success response
     return jsonify({'success': True})
 
 @app.route('/get_subscription', methods=['GET'])
