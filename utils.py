@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 import json
-
+import io
 from main import app
 import requests
 
@@ -24,8 +24,9 @@ def load_image_url():
             app.logger.info(f"Error downloading {image_url}: {response.status_code}")
         # Upload image to S3
         try:
-            s3.upload_fileobj(response.content, bucket_name, filename)
-            app.logger.info(f"Uploaded {filename} to S3 bucket.")
+            with io.BytesIO(response.content) as file_obj:
+                s3.upload_fileobj(file_obj, bucket_name, filename)
+                app.logger.info(f"Uploaded {filename} to S3 bucket.")
         except Exception as e:
             app.logger.info(f"Error uploading {filename} to S3 bucket: {e}")
 
