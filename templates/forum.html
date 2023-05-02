@@ -127,6 +127,7 @@
         })
         .then((data) => {
           console.log(typeof data);
+          data = JSON.parse(data);
           if ('message' in data) {
             // display results
             var resultsDiv = document.getElementById("query-results");
