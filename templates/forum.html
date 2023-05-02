@@ -20,75 +20,6 @@
       padding: 10px 0;
     }
 
-    .user-area img {
-      max-width: 50px;
-      max-height: 50px;
-      border-radius: 50%;
-    }
-
-    .message-posting-area {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #f7f7f7;
-      border-radius: 5px;
-    }
-
-    .message-posting-area label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    .message-posting-area input[type="text"],
-    .message-posting-area textarea {
-      width: 100%;
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      box-sizing: border-box;
-    }
-
-    .message-posting-area textarea {
-      height: 150px;
-      resize: vertical;
-    }
-
-    .message-posting-area button[type="submit"] {
-      display: block;
-      margin-top: 10px;
-      padding: 8px 12px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-
-    .message-display-area {
-      margin-top: 20px;
-    }
-
-    .message-display-area .message {
-      margin-bottom: 20px;
-      padding: 10px;
-      background-color: #f7f7f7;
-      border-radius: 5px;
-    }
-
-    .message-display-area .message h3 {
-      margin-top: 0;
-    }
-
-    .message-display-area .message p {
-      margin-bottom: 0;
-    }
-
-    .message-display-area .message img {
-      max-width: 100%;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-
     table {
       border-collapse: collapse;
       width: 100%;
@@ -106,44 +37,41 @@
 </head>
 
 <body>
- 
-    <div class="user-area">
-      <p>Welcome, {{ user_name }}</a></p>
-      <a href="/logout" class="logout-link">Logout</a>
-    </div>
 
-    <div class="query-area">
-      <h2>Query Music</h2>
-      <label for="title-input">Title:</label>
-      <input type="text" id="title-input">
+  <div class="user-area">
+    <p>Welcome, {{ user_name }}</a></p>
+    <a href="/logout" class="logout-link">Logout</a>
+  </div>
 
-      <label for="year-input">Year:</label>
-      <input type="text" id="year-input">
+  <div class="query-area">
+    <h2>Query Music</h2>
+    <label for="title-input">Title:</label>
+    <input type="text" id="title-input">
 
-      <label for="artist-input">Artist:</label>
-      <input type="text" id="artist-input">
+    <label for="year-input">Year:</label>
+    <input type="text" id="year-input">
 
-      <button id="query-btn">Query</button>
+    <label for="artist-input">Artist:</label>
+    <input type="text" id="artist-input">
 
-      <div id="results"></div>
-      <div id="Subscriptions"></div>
-    </div>
+    <button id="query-btn">Query</button>
+
+    <div id="query-results"></div>
+    <div id="Subscriptions"></div>
+  </div>
 
   <script>
     document.getElementById("query-btn").addEventListener("click", function () {
       var title = document.getElementById("title-input").value;
       var year = document.getElementById("year-input").value;
       var artist = document.getElementById("artist-input").value;
-      // display results
-      var resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "aaaaaa";
 
       // perform query
       var results = performQuery(title, year, artist);
 
       // display results
-      var resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "aaaaaa";
+      var resultsDiv = document.getElementById("query-results");
+      resultsDiv.innerHTML = "";
 
       if (results.length === 0) {
         resultsDiv.innerHTML = "No result is retrieved. Please query again.";
@@ -173,17 +101,78 @@
       }
     });
 
-    function performQuery(title, year, artist) {
-      // perform query and return results
-      // ...
+    function performQuery() {
+      const title = document.getElementById("title").value.trim();
+      const year = document.getElementById("year").value.trim();
+      const artist = document.getElementById("artist").value.trim();
+
       // Check if at least one query parameter is present
       if (!title && !year && !artist) {
         alert("Please enter at least one query parameter.");
         return;
       }
-      return;
-    }
 
+      const query = { title, year, artist };
+      const queryString = Object.entries(query)
+        .filter(([_, value]) => value) // Filter out empty values
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join("&");
+
+      // Send the query to the server and handle the response
+      fetch(`/perform-query?${queryString}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("An error occurred.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.length === 0) {
+            alert("No result is retrieved. Please query again.");
+          } else {
+            // Clear any previous search results
+            const queryResults = document.getElementById("query-results");
+            queryResults.innerHTML = "";
+
+            // Display each result and add the Subscribe button
+            data.forEach((result) => {
+              const { title, year, artist, imageUrl } = result;
+
+              const resultDiv = document.createElement("div");
+              resultDiv.classList.add("result");
+
+              const titleEl = document.createElement("h3");
+              titleEl.textContent = title;
+              resultDiv.appendChild(titleEl);
+
+              const artistEl = document.createElement("p");
+              artistEl.textContent = artist;
+              resultDiv.appendChild(artistEl);
+
+              const yearEl = document.createElement("p");
+              yearEl.textContent = year;
+              resultDiv.appendChild(yearEl);
+
+              const imageEl = document.createElement("img");
+              imageEl.src = imageUrl;
+              resultDiv.appendChild(imageEl);
+
+              const subscribeBtn = document.createElement("button");
+              subscribeBtn.textContent = "Subscribe";
+              subscribeBtn.addEventListener("click", () => {
+                subscribe(result);
+              });
+              resultDiv.appendChild(subscribeBtn);
+
+              queryResults.appendChild(resultDiv);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("An error occurred. Please try again.");
+        });
+    }
     function subscribe(result) {
       // add subscription to DynamoDB
       // ...

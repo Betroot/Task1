@@ -25,7 +25,7 @@ def root():
         'login.html')
 
 
-@app.route('/login', methods=['GET', "POST"])  # 路由默认接收请求方式位POST，然而登录所需要请求都有，所以要特别声明。
+@app.route('/login', methods=['GET', "POST"])
 def login():
     if request.method == 'GET':
         return render_template('login.html')
@@ -63,6 +63,7 @@ def register():
         utils.insert_user(email, user_name, password)
         return redirect(url_for('login'))
 
+
 @app.route('/forum', methods=['GET', "POST"])
 def forum():
     user_name = session.get("user_name")
@@ -77,14 +78,28 @@ def logout_():
     return redirect('/login')
 
 
-if __name__ == '__main__':
-    # This is used when running locally only. When deploying to Google App
-    # Engine, a webserver process such as Gunicorn will serve the app. This
-    # can be configured by adding an `entrypoint` to app.yaml.
+@app.route('/perform-query', methods=['GET'])
+def perform_query():
+    title = request.args.get('title')
+    year = request.args.get('year')
+    artist = request.args.get('artist')
 
-    # Flask's development server will automatically serve static files in
-    # the "static" directory. See:
-    # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
-    # App Engine itself will serve those files as configured in app.yaml.
-    # app.run(host='127.0.0.1', port=8080, debug=True)
+    # Perform query on the music table here
+    app.logger.info("title" + title)
+    app.logger.info("year " + year)
+    app.logger.info("artist " + artist)
+    return None
+
+    # if no_results:
+    #     return jsonify({'message': 'No result is retrieved. Please query again.'}), 200
+    # else:
+    #     # Construct JSON response containing retrieved music information and corresponding artist images
+    #     response = {'music_info': [], 'images': []}
+    #     for result in results:
+    #         response['music_info'].append({'title': result.title, 'year': result.year, 'artist': result.artist})
+    #         response['images'].append(result.artist_image_url)
+    #     return jsonify(response), 200
+
+
+if __name__ == '__main__':
     app.run()
