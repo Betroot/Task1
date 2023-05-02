@@ -57,14 +57,12 @@
   <body>
     <form id="register-form" method="post" action="/register" enctype="multipart/form-data">
       <h1>Create an Account</h1>
-      <label for="id">ID:</label>
-      <input type="text" name="id" id="id" required>
+      <label for="email_label">email:</label>
+      <input type="text" name="email" id="email" required>
       <label for="username">Username:</label>
-      <input type="text" name="username" id="username" required>
+      <input type="text" name="user_name" id="user_name" required>
       <label for="password">Password:</label>
       <input type="password" name="password" id="password" required>
-      <label for="user-image">User Image:</label>
-      <input type="file" name="user-image" id="user-image">
       <input type="submit" value="Register">
       {% if error_msg %}
       <p id="error-msg">{{ error_msg }}</p>

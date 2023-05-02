@@ -41,23 +41,30 @@ def login():
         return resp
     # If the query returned no or multiple user entities, show an error message
     else:
-        error_msg = 'ID or password is invalid' + email + password
+        error_msg = 'ID or password is invalid'
         return render_template('login.html', error_msg=error_msg)
 
 
-#
-# @app.route('/user', methods=['GET', "POST"])
-# def user():
-#     return render_template("user.html")
-#
-#
-# # @app.route('/index')
-# # def index():
-# #     user_info = session.get('user_id')
-# #     if not user_info:
-# #         return redirect('/login')
-# #     return 'hello'
-#
+@app.route('/register', methods=['GET', "POST"])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+    if request.method == 'POST':
+        # retrieve the entered values from the form
+        email = request.form['email']
+        user_name = request.form['user_name']
+        password = request.form['password']
+
+        if utils.is_email_exist():
+            error_message = 'The email already exists'
+            return render_template('register.html', error_msg=error_message)
+
+        utils.insert_user(email, user_name, password)
+        return redirect(url_for('login'))
+
+
+
+
 #
 # @app.route('/logout', methods=['GET', 'POST'])
 # def logout_():
