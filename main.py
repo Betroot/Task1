@@ -102,8 +102,6 @@ def perform_query():
         image_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket': bucket_name, 'Key': image_name})
         music_info['image_url'] = image_signed_url
         music_list.append(music_info)
-    app.logger.info("music_list:")
-    app.logger.info(music_list)
     return jsonify( music_list)
 
 

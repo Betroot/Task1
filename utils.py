@@ -36,7 +36,6 @@ def query_music(title, year, artist):
     response = table.scan(
         FilterExpression=Attr('title').contains(title) & Attr('year').contains(year) & Attr('artist').contains(artist)
     )
-    app.logger.info(response)
     return response
 
 
@@ -77,7 +76,6 @@ def query_subscription_by_email(email):
     response = table.query(
         KeyConditionExpression=Key('email').eq(email)
     )
-    app.logger.info("subscription: " +response)
     return response
 def insert_user(email, username, password):
     table = dynamodb.Table('login')
