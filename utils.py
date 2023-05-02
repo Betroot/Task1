@@ -77,14 +77,14 @@ def validate_user(email, password):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     login_table = dynamodb.Table('login')
 
-    response = login_table.scan()
-
-    items = response['Items']
-    while response.get('LastEvaluatedKey'):
-        response = login_table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
-        items.extend(response['Items'])
-
-    app.logger.info(items)
+    # response = login_table.scan()
+    #
+    # items = response['Items']
+    # while response.get('LastEvaluatedKey'):
+    #     response = login_table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+    #     items.extend(response['Items'])
+    #
+    # app.logger.info(items)
 
     try:
         response = login_table.get_item(
@@ -93,9 +93,13 @@ def validate_user(email, password):
                 'password': password
             }
         )
-        app.logger.info("message: " + response)
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-        return False
-    else:
-        return True
+        item = response['Item']
+        app.logger.info('User credentials are valid')
+        return item
+    except KeyError:
+        print('Invalid email or password')
+        return None
+    except Exception as e:
+        print(f'Error occurred: {e}')
+        return None
+
