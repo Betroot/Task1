@@ -56,11 +56,65 @@
 
       <button id="query-btn">Query</button>
 
+      <div class="subscibe-display-area">
+        <!-- message display area code here -->
+        <h2>My Subscriptions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>title</th>
+              <th>artist</th>
+              <th>year</th>
+              <th>operation</th>
+            </tr>
+          </thead>
+          <tbody id="subscribe-table-body">
+          </tbody>
+        </table>
+      </div>
+
       <div id="query-results"></div>
       <div id="Subscriptions"></div>
     </div>
   </div>
   <script>
+
+
+
+    const tableBody = document.getElementById("subscribe-table-body");
+
+    // Fetch latest messages from backend and add to table
+    fetch("/get_subscription")
+      .then(response => response.json())
+      .then(subscriptions => {
+        subscriptions.forEach(subscription => {
+          const row = document.createElement("tr");
+
+          const titlecell = document.createElement("td");
+          titlecell.textContent = subscription.title;
+          row.appendChild(titlecell);
+
+          const artistCell = document.createElement("td");
+          artistCell.textContent = subscription.artist;
+          row.appendChild(artistCell);
+
+          const yearCell = document.createElement("td");
+          yearCell.textContent = subscription.year;
+          row.appendChild(yearCell);
+
+          const operationCell = document.createElement("td");
+          operationCell.textContent = "";
+          row.appendChild(operationCell);
+
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(error => console.error(error));
+
+
+
+
+
 
 
     document.getElementById("query-btn").addEventListener("click", function () {
