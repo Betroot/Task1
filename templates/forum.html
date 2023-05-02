@@ -61,6 +61,37 @@
   </div>
 
   <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     document.getElementById("query-btn").addEventListener("click", function () {
       var title = document.getElementById("title-input").value.trim();
       var year = document.getElementById("year-input").value.trim();
@@ -71,98 +102,95 @@
       var results = performQuery(title, year, artist);
 
 
-      });
+    });
 
-      function performQuery(title, year, artist) {
-        // Check if at least one query parameter is present
-        if (!title && !year && !artist) {
-          alert("Please enter at least one query parameter.");
-          return;
-        }
+    function performQuery(title, year, artist) {
+      // Check if at least one query parameter is present
+      if (!title && !year && !artist) {
+        alert("Please enter at least one query parameter.");
+        return;
+      }
 
-        const query = { title, year, artist };
-        const queryString = Object.entries(query)
-          .filter(([_, value]) => value) // Filter out empty values
-          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-          .join("&");
+      const query = { title, year, artist };
+      const queryString = Object.entries(query)
+        .filter(([_, value]) => value) // Filter out empty values
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join("&");
 
-        // Send the query to the server and handle the response
-        fetch(`/perform-query?${queryString}`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("An error occurred.");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            if ('message' in data) {
-              // display results
-              var resultsDiv = document.getElementById("query-results");
-              resultsDiv.innerHTML="No result is retrieved. Please query again."
+      // Send the query to the server and handle the response
+      fetch(`/perform-query?${queryString}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("An error occurred.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if ('message' in data) {
+            // display results
+            var resultsDiv = document.getElementById("query-results");
+            resultsDiv.innerHTML = "No result is retrieved. Please query again."
+          } else {
+            // Clear any previous search results
+            const queryResults = document.getElementById("query-results");
+            queryResults.innerHTML = "";
 
-              // // alert("No result is retrieved. Please query again.");
-              // console.log(data.message)
-              
-            } else {
-              // Clear any previous search results
-              const queryResults = document.getElementById("query-results");
-              queryResults.innerHTML = "";
+            // Display each result and add the Subscribe button
+            data.forEach((result) => {
+              console.debug(result)
+              const { title, year, artist, image_url } = result;
 
-              // Display each result and add the Subscribe button
-              data.forEach((result) => {
-                const { title, year, artist, image_url } = result;
+              const resultDiv = document.createElement("div");
+              resultDiv.classList.add("result");
 
-                const resultDiv = document.createElement("div");
-                resultDiv.classList.add("result");
+              const titleEl = document.createElement("h3");
+              titleEl.textContent = title;
+              resultDiv.appendChild(titleEl);
 
-                const titleEl = document.createElement("h3");
-                titleEl.textContent = title;
-                resultDiv.appendChild(titleEl);
+              const artistEl = document.createElement("p");
+              artistEl.textContent = artist;
+              resultDiv.appendChild(artistEl);
 
-                const artistEl = document.createElement("p");
-                artistEl.textContent = artist;
-                resultDiv.appendChild(artistEl);
+              const yearEl = document.createElement("p");
+              yearEl.textContent = year;
+              resultDiv.appendChild(yearEl);
 
-                const yearEl = document.createElement("p");
-                yearEl.textContent = year;
-                resultDiv.appendChild(yearEl);
+              const imageEl = document.createElement("img");
+              imageEl.src = image_url;
+              resultDiv.appendChild(imageEl);
 
-                const imageEl = document.createElement("img");
-                imageEl.src = image_url;
-                resultDiv.appendChild(imageEl);
-
-                const subscribeBtn = document.createElement("button");
-                subscribeBtn.textContent = "Subscribe";
-                subscribeBtn.addEventListener("click", () => {
-                  subscribe(result);
-                });
-                resultDiv.appendChild(subscribeBtn);
-
-                queryResults.appendChild(resultDiv);
+              const subscribeBtn = document.createElement("button");
+              subscribeBtn.textContent = "Subscribe";
+              subscribeBtn.addEventListener("click", () => {
+                subscribe(result);
               });
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            alert("An error occurred. Please try again.");
-          });
-      }
-      function subscribe(result) {
-        // add subscription to DynamoDB
-        // ...
+              resultDiv.appendChild(subscribeBtn);
 
-        // display subscription in subscriptions area
-        var subsDiv = document.getElementById("subscriptions");
+              queryResults.appendChild(resultDiv);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("An error occurred. Please try again.");
+        });
+    }
+    function subscribe(result) {
+      // add subscription to DynamoDB
+      // ...
 
-        var subDiv = document.createElement("div");
-        subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
+      // display subscription in subscriptions area
+      var subsDiv = document.getElementById("subscriptions");
 
-        var img = document.createElement("img");
-        img.src = result.artistImage;
-        subDiv.appendChild(img);
+      var subDiv = document.createElement("div");
+      subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
 
-        subsDiv.appendChild(subDiv);
-      }
+      var img = document.createElement("img");
+      img.src = result.artistImage;
+      subDiv.appendChild(img);
+
+      subsDiv.appendChild(subDiv);
+    }
   </script>
 
 </body>
