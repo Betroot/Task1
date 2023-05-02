@@ -39,7 +39,7 @@ def login():
         resp = redirect(url_for('forum'))
         return resp
     else:
-        error_msg = 'ID or password is invalid'
+        error_msg = 'email or password is invalid'
         return render_template('login.html', error_msg=error_msg)
 
 
