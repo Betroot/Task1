@@ -96,8 +96,7 @@ def perform_query():
 
     response = utils.query_music(title, year, artist)
     if response['Count'] == 0:
-        # return jsonify({'message': 'No result is retrieved. Please query again.'}), 200
-        return None
+        return jsonify({'message': 'No result is retrieved. Please query again.'}), 200
     music_list=[]
     for item in response['Items']:
         music_info = {
