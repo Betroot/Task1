@@ -1,15 +1,18 @@
-import copy
-import datetime
-import json
-import uuid
+
 
 from flask import Flask, request, redirect, render_template, session, url_for, flash, jsonify
-
+import logging
+from logging.handlers import RotatingFileHandler
 import boto3
 
 # # [END gae_python3_datastore_store_and_fetch_times]
 # # [END gae_python38_datastore_store_and_fetch_times]
 app = Flask(__name__)
+
+handler = RotatingFileHandler('/var/log/apache2/myapp.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)
+
 #
 # app.secret_key = 'your-secret-key-here'
 #
@@ -17,6 +20,7 @@ app = Flask(__name__)
 import utils
 @app.route('/')
 def root():
+    app.logger.info("this is a info log")
     utils.create_music_table()
     utils.load_music()
     return render_template(
