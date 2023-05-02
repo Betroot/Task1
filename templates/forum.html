@@ -4,7 +4,6 @@
 <head>
   <title>Forum Page</title>
   <style>
-    /* Add necessary styles here */
     body {
       font-family: Arial, sans-serif;
     }
@@ -44,7 +43,6 @@
     </div>
 
     <div class="subscibe-display-area">
-      <!-- message display area code here -->
       <h2>My Subscriptions</h2>
       <table>
         <thead>
@@ -81,7 +79,6 @@
 
     const tableBody = document.getElementById("subscribe-table-body");
 
-    // Fetch latest messages from backend and add to table
     fetch("/get_subscription")
       .then(response => response.json())
       .then(subscriptions => {
@@ -103,8 +100,8 @@
           const ImageCell = document.createElement("td");
           const Image = document.createElement("img");
           Image.src = subscription.img_url;
-          Image.style.width = "50px"; // Set image width here
-          Image.style.height = "50px"; // Set image height here
+          Image.style.width = "50px"; 
+          Image.style.height = "50px"; 
           ImageCell.appendChild(Image);
           row.appendChild(ImageCell);
 
@@ -126,13 +123,11 @@
       var year = document.getElementById("year-input").value.trim();
       var artist = document.getElementById("artist-input").value.trim();
 
-
       // perform query
       var results = performQuery(title, year, artist);
     });
 
     function performQuery(title, year, artist) {
-      // Check if at least one query parameter is present
       if (!title && !year && !artist) {
         alert("Please enter at least one query parameter.");
         return;
@@ -140,19 +135,12 @@
 
       const query = { title, year, artist };
       const queryString = Object.entries(query)
-        .filter(([_, value]) => value) // Filter out empty values
+        .filter(([_, value]) => value) 
         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
         .join("&");
 
-      // Send the query to the server and handle the response
       fetch(`/perform-query?${queryString}`)
         .then(response => response.json())
-        // => {
-        //   if (!response.ok) {
-        //     throw new Error("An error occurred.");
-        //   }
-        //   return response.json();
-        // })
         .then((data) => {
           console.log(data);
           if ('message' in data) {
@@ -160,10 +148,8 @@
             var resultsDiv = document.getElementById("query-results");
             resultsDiv.innerHTML = "No result is retrieved. Please query again."
           } else {
-            // Clear any previous search results
             const queryResults = document.getElementById("query-results");
             queryResults.innerHTML = "";
-            // Display each result and add the Subscribe button
             data.forEach((result) => {
               console.log(result)
               const { title, year, artist, image_url } = result;
