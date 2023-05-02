@@ -107,7 +107,7 @@ def perform_query():
         music_list.append(music_info)
     app.logger.info("music_list:")
     app.logger.info(music_list)
-    return jsonify({'music_list': music_list})
+    return jsonify( music_list)
 
     # if no_results:
     #     return jsonify({'message': 'No result is retrieved. Please query again.'}), 200
