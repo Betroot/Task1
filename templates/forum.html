@@ -98,11 +98,11 @@
             if ('message' in data) {
               // display results
               var resultsDiv = document.getElementById("query-results");
-              resultsDiv.innerHTML = "";
+              resultsDiv.innerHTML="No result is retrieved. Please query again."
 
-              // alert("No result is retrieved. Please query again.");
-              console.log(data.message)
-              resultDiv.innerHTML(data.message)
+              // // alert("No result is retrieved. Please query again.");
+              // console.log(data.message)
+              
             } else {
               // Clear any previous search results
               const queryResults = document.getElementById("query-results");
