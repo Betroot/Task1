@@ -1,16 +1,15 @@
 from flask import Flask, request, redirect, render_template, session, url_for, flash, jsonify, logging
 import logging
+import boto3
 
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 handler = logging.FileHandler('/var/log/apache2/myapp.log')
 handler.setLevel(logging.INFO)
 app.logger.addHandler(handler)
+s3 = boto3.client('s3')
+bucket_name = "music-bucket340822"
 
-#
-# app.secret_key = 'your-secret-key-here'
-#
-#
 import utils
 
 
@@ -84,11 +83,23 @@ def perform_query():
     year = request.args.get('year')
     artist = request.args.get('artist')
 
-    # Perform query on the music table here
-    app.logger.info("title" + title)
-    app.logger.info("year " + year)
-    app.logger.info("artist " + artist)
-    return None
+    response = utils.query_music(title, year, artist)
+    if response['Count'] == 0:
+        return jsonify({'message': 'No result is retrieved. Please query again.'}), 200
+    music_list=[]
+    for item in response['Items']:
+        music_info = {
+            'title': item['title'],
+            'year': item['year'],
+            'artist': item['artist']
+        }
+        image_url = item['img_url']
+        image_name = image_url.split('/')[-1]
+        image_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket': bucket_name, 'Key': image_name})
+        music_info['image_url'] = image_signed_url
+        music_list.append(music_info)
+
+    return jsonify({'music_list': music_list})
 
     # if no_results:
     #     return jsonify({'message': 'No result is retrieved. Please query again.'}), 200

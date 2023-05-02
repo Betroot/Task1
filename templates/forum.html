@@ -62,9 +62,9 @@
 
   <script>
     document.getElementById("query-btn").addEventListener("click", function () {
-      var title = document.getElementById("title-input").value;
-      var year = document.getElementById("year-input").value;
-      var artist = document.getElementById("artist-input").value;
+      var title = document.getElementById("title-input").value.trim();
+      var year = document.getElementById("year-input").value.trim();
+      var artist = document.getElementById("artist-input").value.trim();
 
       // perform query
       var results = performQuery(title, year, artist);
@@ -132,7 +132,7 @@
 
             // Display each result and add the Subscribe button
             data.forEach((result) => {
-              const { title, year, artist, imageUrl } = result;
+              const { title, year, artist, image_url } = result;
 
               const resultDiv = document.createElement("div");
               resultDiv.classList.add("result");
@@ -150,7 +150,7 @@
               resultDiv.appendChild(yearEl);
 
               const imageEl = document.createElement("img");
-              imageEl.src = imageUrl;
+              imageEl.src = image_url;
               resultDiv.appendChild(imageEl);
 
               const subscribeBtn = document.createElement("button");

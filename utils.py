@@ -4,6 +4,7 @@ import json
 import io
 from main import app
 import requests
+from boto3.dynamodb.conditions import Key, Attr
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
@@ -17,7 +18,7 @@ def load_image_url():
 
     songs = data['songs']
     for song in songs:
-        image_url=song['img_url']
+        image_url = song['img_url']
         filename = image_url.split('/')[-1]
         response = requests.get(image_url)
         if response.status_code != 200:
@@ -29,6 +30,15 @@ def load_image_url():
                 app.logger.info(f"Uploaded {filename} to S3 bucket.")
         except Exception as e:
             app.logger.info(f"Error uploading {filename} to S3 bucket: {e}")
+
+
+def query_music(title, year, artist):
+    table = dynamodb.Table('music')
+    response = table.scan(
+        FilterExpression=Attr('title').contains(title) & Attr('year').contains(year) & Attr('artist').contains(artist)
+    )
+    return response
+
 
 def validate_user(email, password):
     login_table = dynamodb.Table('login')
@@ -50,12 +60,14 @@ def validate_user(email, password):
         else:
             return False
 
+
 def is_email_exist(email):
     table = dynamodb.Table('login')
     response = table.get_item(Key={'email': email})
     if 'Item' in response:
         return True
     return False
+
 
 def insert_user(email, username, password):
     table = dynamodb.Table('login')
@@ -156,7 +168,6 @@ def load_login_data():
     with table.batch_writer() as batch:
         for item in items:
             batch.put_item(Item=item)
-
 
 
 def create_music_table():
