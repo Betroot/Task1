@@ -185,7 +185,7 @@ def validate_user(email, password):
     else:
         # check if response contains item and password matches
         if 'Item' in response and response['Item']['password'] == password:
-            return True
+            return response['Item']
         else:
             return False
 

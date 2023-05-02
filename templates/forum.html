@@ -108,8 +108,7 @@
 <body>
   <div class="container">
     <div class="user-area">
-      <a href="{{ url_for('user') }}"><img src="{{ user_image }}" alt="User Image"></a>
-      <p>Welcome, <a href="{{ url_for('user') }}">{{ user_name }}</a></p>
+      <p>Welcome, {{ user_name }}</a></p>
       <a href="/logout" class="logout-link">Logout</a>
     </div>
 
