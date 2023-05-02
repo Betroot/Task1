@@ -55,7 +55,7 @@ def register():
         user_name = request.form['user_name']
         password = request.form['password']
 
-        if utils.is_email_exist():
+        if utils.is_email_exist(email):
             error_message = 'The email already exists'
             return render_template('register.html', error_msg=error_message)
 
