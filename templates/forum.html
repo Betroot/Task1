@@ -123,8 +123,9 @@
           return response.json();
         })
         .then((data) => {
-          if (data.length === 0) {
-            alert("No result is retrieved. Please query again.");
+          if ('message' in data) {
+            // alert("No result is retrieved. Please query again.");
+            console.log(data.message)
           } else {
             // Clear any previous search results
             const queryResults = document.getElementById("query-results");

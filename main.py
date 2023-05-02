@@ -90,14 +90,10 @@ def perform_query():
     if artist is None:
         artist = ""
 
-    app.logger.info("title: " +title)
-    app.logger.info("year: " +year)
-    app.logger.info("artist: " +artist)
-
     response = utils.query_music(title, year, artist)
     if response['Count'] == 0:
-        return jsonify({}), 200
-    music_list=[]
+        return jsonify({'message': 'No result is retrieved. Please query again.'}), 200
+    music_list = []
     for item in response['Items']:
         music_info = {
             'title': item['title'],
