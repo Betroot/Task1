@@ -101,11 +101,7 @@
       }
     });
 
-    function performQuery() {
-      const title = document.getElementById("title").value.trim();
-      const year = document.getElementById("year").value.trim();
-      const artist = document.getElementById("artist").value.trim();
-
+    function performQuery(title, year, artist) {
       // Check if at least one query parameter is present
       if (!title && !year && !artist) {
         alert("Please enter at least one query parameter.");
