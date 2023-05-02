@@ -4,7 +4,7 @@ import json
 
 from main import app
 
-table_name = 'music'
+
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
 
@@ -105,6 +105,7 @@ def load_login_data():
 
 
 def create_music_table():
+    table_name = 'music'
     # Check if the table already exists
     try:
         table = dynamodb.Table(table_name)
@@ -149,6 +150,7 @@ def create_music_table():
 
 
 def load_music():
+    table_name = 'music'
     table = dynamodb.Table(table_name)
     # Load data from music.json
     with open("/var/www/myapp/music.json") as json_file:
@@ -171,28 +173,20 @@ def validate_user(email, password):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     login_table = dynamodb.Table('login')
 
-    # response = login_table.scan()
-    #
-    # items = response['Items']
-    # while response.get('LastEvaluatedKey'):
-    #     response = login_table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
-    #     items.extend(response['Items'])
-    #
-    # app.logger.info(items)
-
     try:
         response = login_table.get_item(
             Key={
-                'email': email,
-                'password': password
+                'email': email
             }
         )
-        item = response['Item']
-        app.logger.info('User credentials are valid')
-        return item
-    except KeyError:
-        app.logger.info('Invalid email or password')
-        return None
-    except Exception as e:
-        app.logger.info(f'Error occurred: {e}')
-        return None
+    except ClientError as e:
+        app.logger.info(e.response['error']['message'])
+        return False
+
+    else:
+        # check if response contains item and password matches
+        if 'Item' in response and response['Item']['password'] == password:
+            return True
+        else:
+            return False
+
