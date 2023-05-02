@@ -119,7 +119,7 @@
 
       // Send the query to the server and handle the response
       fetch(`/perform-query?${queryString}`)
-        .then(response=>response.json()) 
+        .then(response => response.json())
         // => {
         //   if (!response.ok) {
         //     throw new Error("An error occurred.");
@@ -179,16 +179,28 @@
     function subscribe(result) {
       // add subscription to DynamoDB
       // ...
+      fetch("/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: result.title,
+          artist: result.artist,
+          year: result.year
+        })
+      }
+      ).then(response => response.json())
+        .then(data => {
+          console.log(data);
+        }
+        ).catch(error => console.error(error));
 
       // display subscription in subscriptions area
       var subsDiv = document.getElementById("subscriptions");
 
       var subDiv = document.createElement("div");
       subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
-
-      var img = document.createElement("img");
-      img.src = result.artistImage;
-      subDiv.appendChild(img);
 
       subsDiv.appendChild(subDiv);
     }

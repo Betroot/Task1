@@ -109,16 +109,20 @@ def perform_query():
     app.logger.info(music_list)
     return jsonify( music_list)
 
-    # if no_results:
-    #     return jsonify({'message': 'No result is retrieved. Please query again.'}), 200
-    # else:
-    #     # Construct JSON response containing retrieved music information and corresponding artist images
-    #     response = {'music_info': [], 'images': []}
-    #     for result in results:
-    #         response['music_info'].append({'title': result.title, 'year': result.year, 'artist': result.artist})
-    #         response['images'].append(result.artist_image_url)
-    #     return jsonify(response), 200
 
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+
+    # Get the music information and corresponding artist image from the request body
+    title = request.get_json()['title']
+    year = request.get_json()['year']
+    artist = request.get_json()['artist']
+    email = session.get('email')
+
+    utils.create_subscribe_table()
+    utils.insert_subscribe(email,title,year,artist)
+    # Return a success response
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     app.run()

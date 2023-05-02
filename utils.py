@@ -69,10 +69,55 @@ def is_email_exist(email):
         return True
     return False
 
+def insert_subscribe(email, title, year, artist):
+    table = dynamodb.Table('subscribe')
+    table.put_item(Item={'email': email, 'title': title, 'year': year, 'artist': artist})
 
 def insert_user(email, username, password):
     table = dynamodb.Table('login')
     table.put_item(Item={'email': email, 'user_name': username, 'password': password})
+
+def create_subscribe_table():
+    try:
+        table = dynamodb.Table('subscribe')
+        table.table_status
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'ResourceNotFoundException':
+            # Table does not exist, so create it
+            table = dynamodb.create_table(
+                TableName='subscribe',
+                KeySchema=[
+                    {
+                        'AttributeName': 'email',
+                        'KeyType': 'HASH'
+                    },
+                    {
+                        'AttributeName': 'title',
+                        'KeyType': 'RANGE'
+                    }
+                ],
+                AttributeDefinitions=[
+                    {
+                        'AttributeName': 'email',
+                        'AttributeType': 'S'
+                    },
+                    {
+                        'AttributeName': 'title',
+                        'AttributeType': 'S'
+                    }
+                ],
+                ProvisionedThroughput={
+                    'ReadCapacityUnits': 5,
+                    'WriteCapacityUnits': 5
+                }
+            )
+            table.wait_until_exists()
+        else:
+            # Some other error occurred, raise it
+            raise e
+    else:
+        # Table exists, no need to create it
+        print(f"Table subscribe already exists.")
 
 
 def create_login_table():
