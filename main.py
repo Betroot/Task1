@@ -79,9 +79,9 @@ def logout_():
 
 @app.route('/perform-query', methods=['GET'])
 def perform_query():
-    title = request.args.get('title')
-    year = request.args.get('year')
-    artist = request.args.get('artist')
+    title = str(request.args.get('title'))
+    year = str(request.args.get('year'))
+    artist = str(request.args.get('artist'))
     app.logger.info("title: " +title)
     app.logger.info("year: " +year)
     app.logger.info("artist: " +artist)
