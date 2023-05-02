@@ -16,12 +16,11 @@ import utils
 
 @app.route('/')
 def root():
-    app.logger.info("this is a info log")
-    utils.create_music_table()
-    utils.load_music()
-    utils.create_login_table()
-    utils.load_login_data()
-    utils.load_image_url()
+    # utils.create_music_table()
+    # utils.load_music()
+    # utils.create_login_table()
+    # utils.load_login_data()
+    # utils.load_image_url()
     return render_template(
         'login.html')
 
