@@ -125,7 +125,7 @@ def subscribe():
     return jsonify({'success': True})
 
 @app.route('/get_subscription', methods=['GET'])
-def get_latest_messages():
+def get_subscription():
     email = session.get('email')
     response = utils.query_subscription_by_email(email)
     music_list = []

@@ -83,6 +83,7 @@ def query_subscription_by_email(email):
 
     # 执行查询并返回结果
     response = dynamodb.query(**params)
+    app.logger.info("subscription: " +response)
     return response
 def insert_user(email, username, password):
     table = dynamodb.Table('login')
