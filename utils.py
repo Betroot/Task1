@@ -12,6 +12,7 @@ s3 = boto3.client('s3')
 bucket_name = "music-bucket340822"
 
 
+# load image url
 def load_image_url():
     with open("/var/www/myapp/music.json") as json_file:
         data = json.load(json_file)
@@ -53,7 +54,7 @@ def validate_user(email, password):
         return False
 
     else:
-        # check if response contains item and password matches
+        # check whether response contains item and password matches
         if 'Item' in response and response['Item']['password'] == password:
             return response['Item']
         else:
@@ -67,9 +68,11 @@ def is_email_exist(email):
         return True
     return False
 
+
 def insert_subscribe(email, title, year, artist, img_url):
     table = dynamodb.Table('subscribe')
     table.put_item(Item={'email': email, 'title': title, 'year': year, 'artist': artist, 'img_url': img_url})
+
 
 def delete_subscribe(email, title, year, artist):
     table = dynamodb.Table('subscribe')
@@ -85,6 +88,7 @@ def delete_subscribe(email, title, year, artist):
     else:
         return response
 
+
 def query_subscription_by_email(email):
     table = dynamodb.Table('subscribe')
     response = table.query(
@@ -96,6 +100,7 @@ def query_subscription_by_email(email):
 def insert_user(email, username, password):
     table = dynamodb.Table('login')
     table.put_item(Item={'email': email, 'user_name': username, 'password': password})
+
 
 def create_subscribe_table():
     try:
