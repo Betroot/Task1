@@ -66,12 +66,13 @@
       var year = document.getElementById("year-input").value.trim();
       var artist = document.getElementById("artist-input").value.trim();
 
-      // perform query
-      var results = performQuery(title, year, artist);
-
       // display results
       var resultsDiv = document.getElementById("query-results");
       resultsDiv.innerHTML = "";
+
+      // perform query
+      var results = performQuery(title, year, artist);
+
 
       if (results.length === 0) {
         resultsDiv.innerHTML = "No result is retrieved. Please query again.";
@@ -126,6 +127,7 @@
           if ('message' in data) {
             // alert("No result is retrieved. Please query again.");
             console.log(data.message)
+            resultDiv.innerHTML(data.message)
           } else {
             // Clear any previous search results
             const queryResults = document.getElementById("query-results");
