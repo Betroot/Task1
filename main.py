@@ -17,7 +17,11 @@ import utils
 @app.route('/')
 def root():
     app.logger.info("this is a info log")
-
+    utils.create_music_table()
+    utils.load_music()
+    utils.create_login_table()
+    utils.load_login_data()
+    utils.load_image_url()
     return render_template(
         'login.html')
 
@@ -75,11 +79,6 @@ def logout_():
 
 
 if __name__ == '__main__':
-    utils.create_music_table()
-    utils.load_music()
-    utils.create_login_table()
-    utils.load_login_data()
-    utils.load_image_url()
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
     # can be configured by adding an `entrypoint` to app.yaml.
