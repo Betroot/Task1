@@ -1,12 +1,6 @@
-
-
 from flask import Flask, request, redirect, render_template, session, url_for, flash, jsonify, logging
 import logging
-from logging.handlers import RotatingFileHandler
-import boto3
 
-# # [END gae_python3_datastore_store_and_fetch_times]
-# # [END gae_python38_datastore_store_and_fetch_times]
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 handler = logging.FileHandler('/var/log/apache2/myapp.log')
@@ -18,6 +12,8 @@ app.logger.addHandler(handler)
 #
 #
 import utils
+
+
 @app.route('/')
 def root():
     app.logger.info("this is a info log")
@@ -25,6 +21,7 @@ def root():
     utils.load_music()
     return render_template(
         'login.html')
+
 
 @app.route('/login', methods=['GET', "POST"])  # 路由默认接收请求方式位POST，然而登录所需要请求都有，所以要特别声明。
 def login():
@@ -42,8 +39,10 @@ def login():
         return resp
     # If the query returned no or multiple user entities, show an error message
     else:
-        error_msg = 'ID or password is invalid'+email+password
+        error_msg = 'ID or password is invalid' + email + password
         return render_template('login.html', error_msg=error_msg)
+
+
 #
 # @app.route('/user', methods=['GET', "POST"])
 # def user():
@@ -82,4 +81,3 @@ if __name__ == '__main__':
     # App Engine itself will serve those files as configured in app.yaml.
     # app.run(host='127.0.0.1', port=8080, debug=True)
     app.run()
-

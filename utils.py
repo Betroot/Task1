@@ -3,7 +3,7 @@ from botocore.exceptions import ClientError
 import json
 import logging
 from decimal import Decimal
-
+from main import app
 # Define the table name and resource
 
 table_name = 'music'
@@ -75,7 +75,7 @@ def load_music():
 def validate_user(email, password):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     login_table = dynamodb.Table('login')
-    # Query the login table to check if there is a matching record
+
     try:
         response = login_table.get_item(
             Key={
@@ -83,7 +83,7 @@ def validate_user(email, password):
                 'password': password
             }
         )
-        logging.error("message: " + response)
+        app.logger.info("message: " + response)
     except ClientError as e:
         print(e.response['Error']['Message'])
         return False
