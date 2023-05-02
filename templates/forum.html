@@ -52,6 +52,7 @@
             <th>title</th>
             <th>artist</th>
             <th>year</th>
+            <th>artist image</th>
             <th>operation</th>
           </tr>
         </thead>
@@ -98,6 +99,14 @@
           const yearCell = document.createElement("td");
           yearCell.textContent = subscription.year;
           row.appendChild(yearCell);
+
+          const ImageCell = document.createElement("td");
+          const Image = document.createElement("img");
+          Image.src = subscription.img_url;
+          Image.style.width = "50px"; // Set image width here
+          Image.style.height = "50px"; // Set image height here
+          ImageCell.appendChild(Image);
+          row.appendChild(ImageCell);
 
           const operationCell = document.createElement("td");
           operationCell.textContent = "";
@@ -203,7 +212,8 @@
         body: JSON.stringify({
           title: result.title,
           artist: result.artist,
-          year: result.year
+          year: result.year,
+          img_url:  result.image_url
         })
       }
       ).then(response => response.json())

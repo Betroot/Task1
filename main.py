@@ -111,9 +111,9 @@ def subscribe():
     year = request.get_json()['year']
     artist = request.get_json()['artist']
     email = session.get('email')
-
+    img_url = request.get_json()['img_url']
     utils.create_subscribe_table()
-    utils.insert_subscribe(email,title,year,artist)
+    utils.insert_subscribe(email,title,year,artist,img_url)
     return jsonify({'success': True})
 
 @app.route('/get_subscription', methods=['GET'])
@@ -122,10 +122,12 @@ def get_subscription():
     response = utils.query_subscription_by_email(email)
     music_list = []
     for item in response['Items']:
+
         music_info = {
             'title': item['title'],
             'year': item['year'],
-            'artist': item['artist']
+            'artist': item['artist'],
+            'img_url': item['img_url']
         }
         music_list.append(music_info)
     return jsonify(music_list)

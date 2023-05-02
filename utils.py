@@ -67,9 +67,9 @@ def is_email_exist(email):
         return True
     return False
 
-def insert_subscribe(email, title, year, artist):
+def insert_subscribe(email, title, year, artist, img_url):
     table = dynamodb.Table('subscribe')
-    table.put_item(Item={'email': email, 'title': title, 'year': year, 'artist': artist})
+    table.put_item(Item={'email': email, 'title': title, 'year': year, 'artist': artist, 'img_url': img_url})
 
 def query_subscription_by_email(email):
     table = dynamodb.Table('subscribe')
@@ -77,6 +77,8 @@ def query_subscription_by_email(email):
         KeyConditionExpression=Key('email').eq(email)
     )
     return response
+
+
 def insert_user(email, username, password):
     table = dynamodb.Table('login')
     table.put_item(Item={'email': email, 'user_name': username, 'password': password})
