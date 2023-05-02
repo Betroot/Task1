@@ -78,8 +78,6 @@
   </div>
   <script>
 
-
-
     const tableBody = document.getElementById("subscribe-table-body");
 
     // Fetch latest messages from backend and add to table
@@ -109,12 +107,6 @@
         });
       })
       .catch(error => console.error(error));
-
-
-
-
-
-
 
     document.getElementById("query-btn").addEventListener("click", function () {
       var title = document.getElementById("title-input").value.trim();
@@ -219,12 +211,12 @@
           console.log(data);
         }
         ).catch(error => console.error(error));
+      location.reload()
+      // // display subscription in subscriptions area
+      // var subsDiv = document.getElementById("subscriptions");
 
-      // display subscription in subscriptions area
-      var subsDiv = document.getElementById("subscriptions");
-
-      var subDiv = document.createElement("div");
-      subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
+      // var subDiv = document.createElement("div");
+      // subDiv.innerHTML = "Title: " + result.title + "<br>" + "Artist: " + result.artist + "<br>" + "Year: " + result.year;
 
       // var img = document.createElement("img");
       // img.src = result.artistImage;
