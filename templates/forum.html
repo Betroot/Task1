@@ -43,6 +43,22 @@
       <a href="/logout" class="logout-link">Logout</a>
     </div>
 
+    <div class="subscibe-display-area">
+      <!-- message display area code here -->
+      <h2>My Subscriptions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>title</th>
+            <th>artist</th>
+            <th>year</th>
+            <th>operation</th>
+          </tr>
+        </thead>
+        <tbody id="subscribe-table-body">
+        </tbody>
+      </table>
+    </div>
     <div class="query-area">
       <h2>Query Music</h2>
       <label for="title-input">Title:</label>
@@ -55,23 +71,6 @@
       <input type="text" id="artist-input">
 
       <button id="query-btn">Query</button>
-
-      <div class="subscibe-display-area">
-        <!-- message display area code here -->
-        <h2>My Subscriptions</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>title</th>
-              <th>artist</th>
-              <th>year</th>
-              <th>operation</th>
-            </tr>
-          </thead>
-          <tbody id="subscribe-table-body">
-          </tbody>
-        </table>
-      </div>
 
       <div id="query-results"></div>
       <div id="Subscriptions"></div>
