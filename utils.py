@@ -35,7 +35,7 @@ def load_image_url():
 def query_music(title, year, artist):
     table = dynamodb.Table('music')
     response = table.scan(
-        FilterExpression=Attr('title').contains(title) & Attr('year').contains(year) & Attr('artist').contains(artist)
+        FilterExpression=Attr('title').contains("I") & Attr('year').contains("") & Attr('artist').contains("")
     )
     app.logger.info(response)
     return response
